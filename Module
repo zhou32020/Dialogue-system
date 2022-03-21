@@ -1,0 +1,50 @@
+local module = {}
+function module.SayDialog(text,tweentime,between,specialwords)
+	local numb = 0.8
+	local words = {}
+	while string.len(text) > 1 do
+		local edittext = text
+		local num = string.find(edittext," ")
+		local word = string.sub(edittext,1,num)
+		text = string.sub(edittext,num+1)
+		table.insert(words,word)
+	end
+	local currentx = 0
+	local currenty = 0
+	local framex = script.Parent.AbsoluteSize.X
+	local tweeninfo = TweenInfo.new(tweentime,Enum.EasingStyle.Quad,Enum.EasingDirection.Out)
+	for i,x in pairs(words) do
+		local d = script.Parent.Defualt:Clone()
+		d.Parent = script.Parent.Text
+		d.Text = x
+		local sizex = d.TextBounds.X
+		d.Size = UDim2.new(0,sizex,0,40)
+		if currentx+sizex > framex then
+			currenty=currenty+30
+			currentx = 0
+		end
+		for v,r in pairs(specialwords) do
+			if r.Word == x then
+				d.TextColor3 = r.Color
+			end
+		end
+		d.Position = UDim2.new(0,currentx,0,currenty+40)
+		d.Rotation = math.random(-5,5)
+		currentx = currentx + sizex
+		d.Visible = true
+		game:GetService("TweenService"):Create(d,tweeninfo,{Position = UDim2.new(0,d.Position.X.Offset,0,d.Position.Y.Offset-15), Rotation = math.random(-3,3), TextTransparency = 0}):Play()
+		local chance = math.random(1,2) 
+		if chance == 1 then
+			numb = 0.725
+		elseif chance == 2 then
+			numb = 0.8
+		elseif chance == 3 then
+			numb = 0.755
+		end
+		script.Sound.PlaybackSpeed = numb
+		script.Sound:Play()
+		wait(between)
+	end
+end
+
+return module
