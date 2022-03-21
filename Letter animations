@@ -1,0 +1,23 @@
+local module = require(script.Parent.ModuleScript)
+local ifplaying = false
+
+game.ReplicatedStorage.NPCSpeak.OnClientEvent:connect(function(text)
+	if ifplaying == false then
+		ifplaying = true
+		script.Parent:TweenPosition(UDim2.new(0.5,0,0.85,0),Enum.EasingDirection.Out,Enum.EasingStyle.Back,1)
+		wait(1)
+		local wordtime = 0
+		for v,r in pairs(text) do
+			script.Parent.Text:ClearAllChildren()
+			wordtime = string.len(r.Text)*0.03
+			local coloredwords = {}
+			for s,q in pairs(r.Colored) do
+				local tab = {Word = q.Word,Color = q.Color}
+				table.insert(coloredwords,tab)
+			end
+			module.SayDialog(r.Text,0.6,0.15,coloredwords)
+			wait(wordtime)
+		end
+		script.Parent:TweenPosition(UDim2.new(0.5,0,1.65,0),Enum.EasingDirection.In,Enum.EasingStyle.Back,1)
+	end
+end)
