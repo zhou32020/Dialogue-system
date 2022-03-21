@@ -1,0 +1,13 @@
+local camera = workspace.Camera
+local campart = workspace.CamPart
+camera.CameraType = Enum.CameraType.Scriptable
+local runService = game:GetService("RunService")
+local mouse = game.Players.LocalPlayer:GetMouse()
+local TweenService = game:GetService("TweenService")
+local userInputService = game:GetService("UserInputService")
+local UserGameSettings = UserSettings():GetService("UserGameSettings")
+
+runService:BindToRenderStep("overTheShoulderCamera", 300, function()
+	camera.CFrame = campart.CFrame
+	campart.CFrame = CFrame.lookAt(campart.CFrame.Position,mouse.Hit.p*1.1)
+end)
